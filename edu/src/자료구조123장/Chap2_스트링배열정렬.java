@@ -1,27 +1,10 @@
 package 자료구조123장;
 
 
-//1차 수업 - 2번째 코딩 실습
-//중복이 없는 리스트를 merge하는 버젼
-
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.Collections;
-import java.util.Iterator;
-//10장 Collection, Test01, Test02를 사용
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Collections;
 public class Chap2_스트링배열정렬 {
 //string 정렬, binary search 구현
 //1단계: string, 2단계: string 객체,  Person 객체들의 list\
@@ -75,6 +58,7 @@ public class Chap2_스트링배열정렬 {
 			// file1에서 read하여 list1.add()한다.
 			// 배열을 list로 만드는 방법
 			// 방법1:
+			
 			ArrayList<String> list1 = new ArrayList<>();
 			for (String temp : sarray1) {
 				list1.add(temp);
@@ -99,20 +83,21 @@ public class Chap2_스트링배열정렬 {
 			list2 = removeDuplicate(list2);
 
 
-			System.out.print("\n" + "list1******");
+			System.out.print("\n" + "중복제거후 list1");
 			for (String city : list1)
 				System.out.print(city + " ");
-			System.out.print("\n" + "list2******");
+			System.out.print("\n" + "중복제거후 list2");
 			for (String city : list2)
 				System.out.print(city + " ");
 			ArrayList<String> list3 = new ArrayList<String>();
-			//--------------------- array version: merge에 중복 제거하면 정상 동작함 
+			//--------------------- array version: merge에 중복 제거하면 정상 동작함
+
 			String [] sl1 = new String[list1.size()];
 			String [] sl2 = new String[list2.size()];
 			String [] sl3 = new String[list1.size() + list2.size()];
 			sl1 = list1.toArray(sl1);
 			sl2 = list2.toArray(sl2);
-			System.out.println();
+			System.out.println("배열 출력");
 			for (String city : sl1)
 				System.out.print(city + " ");
 			System.out.println();
@@ -141,6 +126,7 @@ public class Chap2_스트링배열정렬 {
 			for (String city : sl3)
 				System.out.print(city + " ");
 			// -------------------- list version
+			
 			/*
 			Iterator<String> iter1 = list1.iterator();
 			Iterator<String> iter2 = list2.iterator();
