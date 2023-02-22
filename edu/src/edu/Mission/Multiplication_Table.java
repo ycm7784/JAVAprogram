@@ -4,8 +4,8 @@ class Count1{
 	public void mutl(int m){
 		for(int n=2;n<=9;n+=m) {
 				for(int i =1;i <=9;i++) {
-					for(int j=1;j<=m;j++) {
-			System.out.print(n +"*"+ i+"="+ (n*i)+"\t");
+					for(int j=0;j<m;j++) {
+			System.out.print(n+j +"*"+ i+"="+ ((n+j)*i)+"\t");
 						}
 					System.out.println("\t");
 				}
