@@ -31,7 +31,7 @@ static void path(int m, int p)
 // Output a path (if any) in the maze; rows is m, cols is p;
 {
 	//start at (1,1)
-	mark[1][1] = 1;
+	mark[1][1] = 2;
 	Stack<items> stack = new Stack<items>();
 	items temp = new items() ;
 	temp.x = 1; temp.y = 1; temp.dir = N;
@@ -39,12 +39,15 @@ static void path(int m, int p)
 
 
 	while (!stack.isEmpty()) // stack not empty
-	{
+	{	
+		mark[temp.x][temp.y] = 0;
 		temp = stack.pop(); // unstack
+		
 		int i = temp.x; int j = temp.y; int d = temp.dir;
+		
 		while (d < 8) // moves forward
 		{
-			System.out.println("i: " + i + " j: " + j +" d: "+d );
+			System.out.println("i: " + i + " j: " + j +" d: "+d +"mark["+i+"]["+j+"]: "+mark[i][j]);
 		
 			int g = i + moves[d].a;
 			int h = j + moves[d].b;
@@ -56,7 +59,7 @@ static void path(int m, int p)
 				return;
 			}
 			if ((maze[g][h]==0) && (mark[g][h]==0)) { // new position
-				mark[g][h] = 1;
+				mark[g][h] = 2;
 				//push the old temp to the stack, but the direction changes.
 				//Because the neighbor in the direction of d has been checked.
 				temp = new items();
@@ -116,7 +119,12 @@ public static void main(String[] args){
 		System.out.println();
 	}
 	path(12, 15);
-
+	for (int i = 0; i <= 13; i++)
+	{
+		for (int j = 0; j <= 16; j++)
+		System.out.print(mark[i][j]+ "  ");
+		System.out.println();
+	}
 	System.out.println("end");
 }
 }

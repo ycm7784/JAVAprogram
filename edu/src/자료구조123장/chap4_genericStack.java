@@ -28,7 +28,7 @@ public class chap4_genericStack {
 	private int top; // 스택 포인터
 
 //--- 생성자(constructor) ---//
-	public genericStack(int capacity) {
+	public void genericStack(int capacity) {
 		top = 0;
 		this.capacity = capacity;
 		// this.data = new T[capacity]; // 스택 본체용 배열을 생성
