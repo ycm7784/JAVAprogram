@@ -51,7 +51,7 @@ class LinkedList1 {
 	{
 		
 		
-		return 0;
+		return true;
 	}
 	public void Show() { // 전체 리스트를 순서대로 출력한다.
 
@@ -64,18 +64,24 @@ class LinkedList1 {
 		if(p == null) {
 			first = newnode;
 		}else{
-			if(c.compare(element, p.data) > 0) {
+			while(p != null) {
+			if(c.compare(element, p.data) <= 0) {
 				newnode.link = p;
 				 if (q== null){
-						first = newnode;	
+						first = newnode;
+						break;
 					}else {
 						q.link = newnode;
+						break;
 						}
-			} else {
+			} 
+			else {
 				q = p;
 				p = p.link;
 				if( p == null) {
 					q.link = newnode;
+					break;
+					}
 				}
 			}
 		}
@@ -144,7 +150,7 @@ public class Test8_Test_SimpleObjectList {
 	            	String sname1 =  sc.next();
 	            	//l.add(sno1, sname1);
 	            	data = new SimpleObject1(sno1, sname1);
-	            	l.Add(data, SimpleObject1.NO_ORDER);
+	            	l.Add(data, SimpleObject1.NAME_ORDER);
 	    	                   
 	                     break;
 	             case Delete :                          // 머리 노드 삭제
@@ -160,12 +166,14 @@ public class Test8_Test_SimpleObjectList {
 	                    l.Show();
 	                    break;
 	             case Search :                           // 회원 번호 검색
-
-	                boolean result1 = l.search(n);
+	            	 String sno2 =  sc.next();
+		             String sname2 =  sc.next();
+		            	data = new SimpleObject1(sno2, sname2);
+	                boolean result1 = l.Search(data);
 	                    if (result1 == false)
-	                        System.out.println("검색 값 = " + n + "데이터가 없습니다.");
+	                        System.out.println("검색 값 = " + data + "데이터가 없습니다.");
 	                    else
-	                        System.out.println("검색 값 = " + n + "데이터가 존재합니다.");
+	                        System.out.println("검색 값 = " + data + "데이터가 존재합니다.");
 	                     break;
 	             case Exit :                           // 꼬리 노드 삭제
 	                    break;
