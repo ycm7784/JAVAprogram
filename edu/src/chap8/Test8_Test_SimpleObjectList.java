@@ -38,6 +38,7 @@ class Node1 {
 	SimpleObject1 data;
 	Node1 link;
 	public Node1(SimpleObject1 element) {
+		data = element;
 		link = null;
 	}
 }
@@ -47,16 +48,49 @@ class LinkedList1 {
 	public LinkedList1() {
 		first = null;
 	}
-	public boolean Delete(String num1) //delete the element
+	public boolean Delete(SimpleObject1 element, Comparator<? super SimpleObject1> c,Comparator<? super SimpleObject1> d) //delete the element
 	{
-		
-		
-		return true;
+		Node1 p= first , q= null;
+		while(p != null) {
+			if(c.compare(p.data,element) == 0 && d.compare(p.data,element) == 0) {
+				if(q== null) {
+					first = p.link;
+					return true;
+				}else {
+					q.link = p.link;
+					return true;
+				}
+			}else {
+				q = p;
+				p = p.link;
+			}
+		}
+		return false;
 	}
 	public void Show() { // 전체 리스트를 순서대로 출력한다.
-
+		Node1 p= first , q= null;
+		while(p != null) {
+			System.out.println(p.data);
+			q = p;
+			p = p.link;
+		}
 	}
-	public void Add(SimpleObject1 element, Comparator<? super SimpleObject1> c) //임의 값을 삽입할 때 리스트가 오름차순으로 정렬이 되도록 한다 
+
+		
+//	public void ad(Node1 a ,Node1 b, Node1 newnode){
+//		newnode.link = a;
+//		 if (b== null){
+//				first = newnode;
+//				break;
+//			}else {
+//				b.link = newnode;
+//				break;
+//				}
+//		}
+
+
+	@SuppressWarnings("unused")
+	public void Add(SimpleObject1 element, Comparator< SimpleObject1> c,Comparator< SimpleObject1> d) //임의 값을 삽입할 때 리스트가 오름차순으로 정렬이 되도록 한다 
 	{
 		
 		Node1 newnode = new Node1(element);
@@ -65,7 +99,7 @@ class LinkedList1 {
 			first = newnode;
 		}else{
 			while(p != null) {
-			if(c.compare(element, p.data) <= 0) {
+			if(c.compare(p.data,element) > 0) {
 				newnode.link = p;
 				 if (q== null){
 						first = newnode;
@@ -75,7 +109,7 @@ class LinkedList1 {
 						break;
 						}
 			} 
-			else {
+			else if (c.compare(p.data,element) < 0){
 				q = p;
 				p = p.link;
 				if( p == null) {
@@ -83,11 +117,39 @@ class LinkedList1 {
 					break;
 					}
 				}
+			else {
+				if (d.compare(p.data, element)>=0) {
+					newnode.link = p;
+					 if (q== null){
+							first = newnode;
+							break;
+						}else {
+							q.link = newnode;
+							break;
+							}
+				}
+				else {
+					q = p;
+					p = p.link;
+					if( p == null) {
+						q.link = newnode;
+						break;
+						}
+					}
+				}
 			}
 		}
 	}
-	public boolean Search(SimpleObject1 data) { // 전체 리스트를 순서대로 출력한다.
-		return true;
+	public boolean Search(SimpleObject1 element, Comparator<? super SimpleObject1> c,Comparator<? super SimpleObject1> d) { // 전체 리스트에서 검색하여 출력한다.
+		Node1 p= first , q= null;
+		while(p != null) {
+			if(c.compare(p.data,element) == 0 && d.compare(p.data,element) == 0  ) {
+				return true;
+			}else {
+				q = p;
+				p = p.link;
+			}
+		}return false;
 	}
 }
 public class Test8_Test_SimpleObjectList {
@@ -150,14 +212,16 @@ public class Test8_Test_SimpleObjectList {
 	            	String sname1 =  sc.next();
 	            	//l.add(sno1, sname1);
 	            	data = new SimpleObject1(sno1, sname1);
-	            	l.Add(data, SimpleObject1.NAME_ORDER);
+	            	l.Add(data, SimpleObject1.NAME_ORDER,SimpleObject1.NO_ORDER);
 	    	                   
 	                     break;
 	             case Delete :                          // 머리 노드 삭제
-	            	 String num = sc.next();
-	            	 boolean result =l.Delete(num);
+	            	 String sno2 =  sc.next();
+		             String sname2 =  sc.next();
+		             data = new SimpleObject1(sno2, sname2);
+	            	 boolean result =l.Delete(data, SimpleObject1.NAME_ORDER,SimpleObject1.NO_ORDER);
 	            	 if(result)
-	                  	 System.out.println("삭제된 데이터는 " + num);
+	                  	 System.out.println("삭제된 데이터는 " + data);
 	                  	 else {
 	                  		 System.out.println("데이터 없음");
 	                  	 }
@@ -166,10 +230,10 @@ public class Test8_Test_SimpleObjectList {
 	                    l.Show();
 	                    break;
 	             case Search :                           // 회원 번호 검색
-	            	 String sno2 =  sc.next();
-		             String sname2 =  sc.next();
-		            	data = new SimpleObject1(sno2, sname2);
-	                boolean result1 = l.Search(data);
+	            	 String sno3 =  sc.next();
+		             String sname3 =  sc.next();
+		            	data = new SimpleObject1(sno3, sname3);
+	                boolean result1 = l.Search(data, SimpleObject1.NAME_ORDER,SimpleObject1.NO_ORDER);
 	                    if (result1 == false)
 	                        System.out.println("검색 값 = " + data + "데이터가 없습니다.");
 	                    else

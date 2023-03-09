@@ -1,5 +1,8 @@
 package chap8;
 
+import java.util.Comparator;
+import java.util.Scanner;
+
 class SimpleObject {
 
 	String sno; // 회원번호
@@ -19,13 +22,18 @@ class SimpleObject {
 	public static final Comparator<SimpleObject> NO_ORDER = new NoOrderComparator();
 
 	private static class NoOrderComparator implements Comparator<SimpleObject> {
-
+		public int compare(SimpleObject d1, SimpleObject d2) {
+			return (Integer.parseInt(d1.sno)> Integer.parseInt(d2.sno)? 1 : (Integer.parseInt(d1.sno)<Integer.parseInt(d2.sno) ?-1 :0 ));
+		}
 	}
 
 	// --- 이름으로 순서를 매기는 comparator ---//
 	public static final Comparator<SimpleObject> NAME_ORDER = new NameOrderComparator();
 
 	private static class NameOrderComparator implements Comparator<SimpleObject> {
+		public int compare(SimpleObject d1, SimpleObject d2) {
+			return d1.sname.compareTo(d2.sname);
+		}
 
 	}
 }
@@ -71,29 +79,98 @@ class DoubledLinkedList2 {
 	}
 
 // --- 노드를 검색 ---//
-	public SimpleObject search(SimpleObject obj, Comparator<? super SimpleObject> c) {
+	public boolean   search(SimpleObject obj, Comparator<? super SimpleObject> c,Comparator<? super SimpleObject> d) {
 		Node2 ptr = first.rlink; // 현재 스캔 중인 노드
-
-
+		
+		return true;
 	}
 
 // --- 전체 노드 표시 ---//
 	public void show() {
-
+		Node2 next = first;
+		while(next.rlink != first) {
+				System.out.println(next.rlink.data);
+				next = next.rlink;
+		}
 	}
 
 // --- 올림차순으로 정렬이 되도록 insert ---//
-	public void add(SimpleObject obj, Comparator<? super SimpleObject> c) {
+	public void add(SimpleObject obj, Comparator<? super SimpleObject> c,Comparator<? super SimpleObject> d) {
 		Node2 temp = new Node2(obj);
-		Node2 ptr = first;
+		Node2 next = first ;
+		if (next.rlink == first) { // 아무것도 없을때
+			next.rlink = temp;temp.llink = next;
+			temp.rlink = next;next.llink = temp;
+		}
+		else {
+			while(true) {
+				if(d.compare(next.rlink.data, temp.data)>0) { // next.rlink의name이 temp의name보다 클때
+					temp.llink = next;        
+					temp.rlink = next.rlink;
+					next.rlink.llink = temp;
+					if(next ==first) {// 첫번째 노드로 들어갈때
+						first.rlink = temp;
+						break;
+					}else {//가운데 들어갈때
+						next.rlink = temp;
+						break;
+					}
+				}else if (d.compare(next.rlink.data, temp.data)< 0) {// next.rlink의name이 temp의name보다 작을때
+					next = next.rlink;
+					if(next.rlink ==first) { // 마지막 노드로 들어갈때
+						next.rlink = temp;
+						temp.llink = next;
+						temp.rlink = first;
+						first.llink = temp;
+						break;
+					}
+				}else {
+					if (c.compare(next.rlink.data, temp.data)>= 0) { // next.rlink의no이 temp의no보다 클때
+						temp.llink = next;        
+						temp.rlink = next.rlink;
+						next.rlink.llink = temp;
+						if(next ==first) {// 첫번째 노드로 들어갈때
+							first.rlink = temp;
+							break;
+						}else {//가운데 들어갈때
+							next.rlink = temp;
+							break;
+						}
+					}
+					else {
+						next = next.rlink;
+						if(next.rlink ==first) { // 마지막 노드로 들어갈때
+							next.rlink = temp;
+							temp.llink = next;
+							temp.rlink = first;
+							first.llink = temp;
+							break;
+						}
+					}
+					
+				}
+			}
+		}
+		
 
 
 	}
 
 // --- list에 삭제할 데이터가 있으면 해당 노드를 삭제 ---//
-	public void delete(SimpleObject obj, Comparator<? super SimpleObject> c) {
-
+	public boolean delete(SimpleObject obj, Comparator<? super SimpleObject> c,Comparator<? super SimpleObject> d) {
+		Node2 next = first;
+		while(next.rlink != first) {
+			if(c.compare(next.rlink.data,obj) == 0 && d.compare(next.rlink.data,obj) == 0) {
+					next.rlink.rlink.llink = next;
+					next.rlink = next.rlink.rlink;
+					return true;
+					
+			}else {
+				next = next.rlink;
+			}
+		}return false;
 	}
+	
 	public DoubledLinkedList2 merge(DoubledLinkedList2 lst2) {
 		DoubledLinkedList2 lst3 = new DoubledLinkedList2();
 		Node2 ai = this.first.rlink, bi = lst2.first.rlink;
@@ -156,7 +233,7 @@ public class Chap8_Test_SimpleObjectCircularDList {
 				System.out.println(" 회원이름: ");
 				sname1 = sc.next();
 				SimpleObject so = new SimpleObject(sno1, sname1);
-				lst1.add(so, SimpleObject.NO_ORDER);
+				lst1.add(so, SimpleObject.NO_ORDER,SimpleObject.NAME_ORDER);
 				break;
 			case Delete: // 머리 노드 삭제
 				Scanner sc2 = new Scanner(System.in);
@@ -165,22 +242,31 @@ public class Chap8_Test_SimpleObjectCircularDList {
 				System.out.println(" 회원이름: ");
 				sname1 = sc2.next();
 				SimpleObject so2 = new SimpleObject(sno1, sname1);
-				lst1.delete(so2, SimpleObject.NO_ORDER);
-				
+				boolean  result= lst1.delete(so2, SimpleObject.NO_ORDER,SimpleObject.NAME_ORDER);
+				if(result)
+                 	 System.out.println("삭제된 데이터는 " + so2);
+                 	 else {
+                 		 System.out.println("데이터 없음");
+                 	 }
 
 				break;
 			case Show: // 꼬리 노드 삭제
-				//l.Show();
+				lst1.show();
 				break;
 			case Search: // 회원 번호 검색
-/*
-				//boolean result = l.search(n);
-				if (result == false)
-					System.out.println("검색 값 = " + n + "데이터가 없습니다.");
+				Scanner sc3 = new Scanner(System.in);
+				System.out.println(" 회원번호: ");
+				sno1 = sc3.next();
+				System.out.println(" 회원이름: ");
+				sname1 = sc3.next();
+				SimpleObject so3 = new SimpleObject(sno1, sname1);
+				boolean result1 = lst1.search(so3, SimpleObject.NO_ORDER,SimpleObject.NAME_ORDER);
+				if (result1 == false)
+					System.out.println("검색 값 = " + so3 + "데이터가 없습니다.");
 				else
-					System.out.println("검색 값 = " + n + "데이터가 존재합니다.");
+					System.out.println("검색 값 = " + so3 + "데이터가 존재합니다.");
 				break;
-				*/
+				
 			case Exit: // 꼬리 노드 삭제
 				break;
 			}
