@@ -43,7 +43,7 @@ class MergeSort {
      Scanner stdIn = new Scanner(System.in);
 
      System.out.println("병합 정렬");
-     int []x = {5,6,4,
+
      
      System.out.print("요솟수: ");
      int nx = stdIn.nextInt();
