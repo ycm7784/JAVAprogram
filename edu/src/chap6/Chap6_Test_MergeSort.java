@@ -1,17 +1,17 @@
 package chap6;
 
 //PhyscData 클래스를 Comparable로 수정해야 한다.
+import java.util.Arrays;
+
+import chap6.PhyscExamSort.PhyscData;
 
 public class Chap6_Test_MergeSort {
-	package Chap6_Sorting;
+	
 	//MergeSort() 구현 소스 코드를 사용하여 객체들의 정렬 소스코드로 수정한다.
-	import java.util.Arrays;
-
-	public class MergeSortObjects {
-
+	
 		// --- 배열 요소 a[idx1]와 a[idx2]의 값을 교환 ---//
 		static void merge(PhyscData[] a, int lefta, int righta, int leftb, int rightb ) {
-			if(a[lefta].compareTo(a[right])>0)
+			//if(a[lefta].compareTo(a[right])>0)
 		}
 
 		// --- 퀵 정렬(비재귀 버전)---//
@@ -45,3 +45,4 @@ public class Chap6_Test_MergeSort {
 			         System.out.printf("%-8s%3d%5.1f\n", x[i].name, x[i].height, x[i].vision);
 		}
 }
+	

@@ -20,7 +20,7 @@ class PhyscExamSort {
      
      @Override
      public int compareTo(PhyscData p) {
-    	 if(this.name.compareTo(p.name))
+    	// if(this.name.compareTo(p.name))
     	 return 0;
      }
      //--- 신체검사 데이터를 문자열로 반환 --//

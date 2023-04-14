@@ -66,13 +66,11 @@ class Tree {
 	boolean insert(int x) {// binary search tree를 만드는 입력 => A + B * C을 tree로 만드는 방법: 입력 해결하는 알고리즘 작성 방법을
 							// 설계하여 구현
 		TreeNode p = root;
-		TreeNode q = null;
 		TreeNode newNode = new TreeNode(x);
 		if(p == null) root = new TreeNode(x);
 		while(p != null) {
 			if(x < p.data) {
 				if(p.LeftChild != null) {
-					q = p;
 					p = p.LeftChild;
 				}else {
 					p.LeftChild = newNode;
@@ -81,7 +79,6 @@ class Tree {
 			}
 			else if (x > p.data) {
 				if(p.RightChild != null) {
-					q = p;
 					p = p.RightChild;
 				}else {
 					p.RightChild = newNode;
@@ -96,28 +93,62 @@ class Tree {
 		return true;
 	}
 	boolean delete(int num) {
-		TreeNode p = root, q = null;
+		TreeNode p = root, q = null ,r = null;
 		int branchMode = 0; //1은 left, 2는 right
-	
+		while(p != null) {
+			if(num < p.data) {
+				q = p;
+				p = p.LeftChild;
+				branchMode = 1;
+			}
+			else if(num > p.data) {
+				q = p;
+				p = p.RightChild;
+				branchMode = 2;
+				
+			}else {//num == p.data
+				if(p.LeftChild ==null && p.RightChild == null) { // 자식 노드가 없을때
+					if(branchMode == 1) q.LeftChild = null;	// 왼쪽노드 삭제
+					else if(branchMode == 2) q.RightChild = null; // 오른쪽 노드 삭제	
+				}	
+				else if(p.LeftChild !=null && p.RightChild != null) {
+					if(branchMode == 1) {
+						p = p.RightChild;
+						while(p.LeftChild !=null) {
+							r = p;
+							p = p.LeftChild;
+						}
+						r.LeftChild = p.RightChild;
+						p.LeftChild = q.LeftChild.LeftChild;
+						p.RightChild = q.LeftChild.RightChild;
+						q.LeftChild = p;	// 왼쪽노드 삭제
+					}
+					else if(branchMode == 2) q.RightChild = null; // 오른쪽 노드 삭제	
+				}
+				else if(p.LeftChild != null){
+					
+				}
+				else if(p.RightChild != null) {
+					
+				}
+			}
+		}
 		return false;
 		
 	}
 	boolean search(int num) {
 		TreeNode p = root;
-		TreeNode q = null;
 		while(p != null) {
 			if(num == p.data) {
 				return true;
 			}
 			else if(num < p.data) {
 				if(p.LeftChild != null) {
-					q = p;
 					p = p.LeftChild;
 				}else return false;
 			}
 			else if (num > p.data) {
 				if(p.RightChild != null) {
-					q = p;
 					p = p.RightChild;
 				}else return false;
 			}
